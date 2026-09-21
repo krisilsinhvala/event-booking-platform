@@ -60,6 +60,21 @@ app.get('/api/health', (request, response) => {
   });
 });
 
+const frontendDistPath = path.join(currentDirectory, '../frontend/dist');
+app.use(express.static(frontendDistPath));
+
+app.get('*', (request, response, next) => {
+  if (request.path.startsWith('/api/')) {
+    return next();
+  }
+  const indexPath = path.join(frontendDistPath, 'index.html');
+  response.sendFile(indexPath, (error) => {
+    if (error) {
+      next();
+    }
+  });
+});
+
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
 

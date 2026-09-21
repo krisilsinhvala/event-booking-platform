@@ -3,11 +3,13 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const requiredEnvironmentVariables = ['JWT_SECRET', 'MONGO_URI', 'FRONTEND_URL'];
+const hasMongoUri = Boolean(process.env.MONGO_URI || process.env.MONGODB_URI);
 
 if (process.env.NODE_ENV === 'production') {
-  const missingVariables = requiredEnvironmentVariables.filter(
-    (variableName) => !process.env[variableName]
-  );
+  const missingVariables = requiredEnvironmentVariables.filter((variableName) => {
+    if (variableName === 'MONGO_URI') return !hasMongoUri;
+    return !process.env[variableName];
+  });
 
   if (missingVariables.length > 0) {
     throw new Error(`Missing environment variables: ${missingVariables.join(', ')}`);
@@ -35,9 +37,7 @@ export const environment = {
   adminName: process.env.ADMIN_NAME || 'Eventora Admin',
   adminEmail: process.env.ADMIN_EMAIL || '',
   adminPassword: process.env.ADMIN_PASSWORD || '',
-  seedEvents:
-    process.env.SEED_EVENTS === 'true' ||
-    (process.env.NODE_ENV !== 'production' && process.env.SEED_EVENTS !== 'false'),
+  seedEvents: process.env.SEED_EVENTS !== 'false',
   googleClientId: process.env.GOOGLE_CLIENT_ID || '',
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
   minUpcomingEvents: Number(process.env.MIN_UPCOMING_EVENTS) || 10,

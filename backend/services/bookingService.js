@@ -2,11 +2,19 @@ import Event from '../models/Event.js';
 import ApiError from '../utils/ApiError.js';
 
 const reserveEventSeats = async (eventId, numberOfTickets) => {
+  const existingEvent = await Event.findById(eventId);
+  if (!existingEvent || !existingEvent.isPublished) {
+    throw new ApiError(404, 'Event not found or not available.');
+  }
+
+  if (existingEvent.availableSeats < numberOfTickets) {
+    throw new ApiError(409, 'Not enough available seats for this event.');
+  }
+
   const event = await Event.findOneAndUpdate(
     {
       _id: eventId,
       isPublished: true,
-      date: { $gt: new Date() },
       availableSeats: { $gte: numberOfTickets }
     },
     { $inc: { availableSeats: -numberOfTickets } },

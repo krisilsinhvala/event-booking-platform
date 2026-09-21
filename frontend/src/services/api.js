@@ -2,7 +2,8 @@ import axios from 'axios';
 import { normalizedApiUrl } from '../utils/apiUrl';
 
 const api = axios.create({
-  baseURL: normalizedApiUrl
+  baseURL: normalizedApiUrl,
+  timeout: 15000
 });
 
 api.interceptors.request.use((config) => {

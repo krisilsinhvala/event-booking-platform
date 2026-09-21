@@ -14,7 +14,10 @@ const createTransporter = () => {
     auth: {
       user: environment.smtpUser,
       pass: environment.smtpPassword
-    }
+    },
+    connectionTimeout: 5000,
+    greetingTimeout: 5000,
+    socketTimeout: 5000
   });
 };
 

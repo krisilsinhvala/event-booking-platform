@@ -38,20 +38,16 @@ const createBooking = asyncHandler(async (request, response) => {
   }
 
   const populatedBooking = await booking.populate('event', 'title date time venue location');
-  let emailDelivered = true;
   if (paymentMethod === 'cash') {
-    try {
-      await sendCashBookingEmail({ email: request.user.email, booking: populatedBooking });
-    } catch (error) {
-      emailDelivered = false;
+    sendCashBookingEmail({ email: request.user.email, booking: populatedBooking }).catch((error) => {
       console.error(`Cash booking email failed: ${error.message}`);
-    }
+    });
   }
 
   response.status(201).json({
     success: true,
     message: paymentMethod === 'cash'
-      ? emailDelivered ? 'Cash booking created successfully.' : 'Cash booking created, but the notification email could not be delivered.'
+      ? 'Cash booking created successfully.'
       : 'Online booking created. Complete the payment to confirm it.',
     data: { booking: populatedBooking }
   });

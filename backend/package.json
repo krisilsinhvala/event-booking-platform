@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon server.js",
     "start": "node server.js",
-    "build": "npm install && cd ../frontend && npm install && npm run build",
+    "build": "npm install --include=dev && cd ../frontend && npm install --include=dev && npm run build",
     "seed:admin": "node scripts/seedAdmin.js",
     "seed:events": "node scripts/seedEvents.js"
   },

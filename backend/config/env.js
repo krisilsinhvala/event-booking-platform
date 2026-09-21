@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 
 dotenv.config();
 
-const requiredEnvironmentVariables = ['JWT_SECRET', 'MONGO_URI', 'FRONTEND_URL'];
+const requiredEnvironmentVariables = ['JWT_SECRET', 'MONGO_URI'];
 const hasMongoUri = Boolean(process.env.MONGO_URI || process.env.MONGODB_URI);
 
 if (process.env.NODE_ENV === 'production') {

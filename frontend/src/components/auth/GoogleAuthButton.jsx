@@ -33,13 +33,16 @@ function GoogleAuthButton({ mode = 'login' }) {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(false);
 
-  const clientId =
-    import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-    import.meta.env.GOOGLE_CLIENT_ID ||
-    '381378634837-ekgoiqdsoc61p8fi7kkgna7gndfa5ij1.apps.googleusercontent.com';
-  const isConfigured = Boolean(
-    clientId && clientId.trim() && !clientId.includes('your_google_client_id')
-  );
+  const resolveGoogleClientId = () => {
+    const envId = import.meta.env.VITE_GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+    if (envId && envId.trim() && !envId.includes('your_google_client_id') && !envId.includes('placeholder')) {
+      return envId.trim();
+    }
+    return '381378634837-ekgoiqdsoc61p8fi7kkgna7gndfa5ij1.apps.googleusercontent.com';
+  };
+
+  const clientId = resolveGoogleClientId();
+  const isConfigured = Boolean(clientId && clientId.trim());
 
   const handleGoogleSuccess = async (credentialResponse) => {
     if (!credentialResponse?.credential) {

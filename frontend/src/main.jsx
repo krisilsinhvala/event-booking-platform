@@ -7,10 +7,15 @@ import App from './App.jsx';
 import './index.css';
 import 'react-toastify/dist/ReactToastify.css';
 
-const googleClientId =
-  import.meta.env.VITE_GOOGLE_CLIENT_ID ||
-  import.meta.env.GOOGLE_CLIENT_ID ||
-  '381378634837-ekgoiqdsoc61p8fi7kkgna7gndfa5ij1.apps.googleusercontent.com';
+const resolveGoogleClientId = () => {
+  const envId = import.meta.env.VITE_GOOGLE_CLIENT_ID || import.meta.env.GOOGLE_CLIENT_ID;
+  if (envId && envId.trim() && !envId.includes('your_google_client_id') && !envId.includes('placeholder')) {
+    return envId.trim();
+  }
+  return '381378634837-ekgoiqdsoc61p8fi7kkgna7gndfa5ij1.apps.googleusercontent.com';
+};
+
+const googleClientId = resolveGoogleClientId();
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>

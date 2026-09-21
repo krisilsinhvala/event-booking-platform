@@ -61,13 +61,22 @@ app.get('/api/health', (request, response) => {
 });
 
 const frontendDistPath = path.join(currentDirectory, '../frontend/dist');
-app.use(express.static(frontendDistPath));
+app.use(
+  express.static(frontendDistPath, {
+    setHeaders: (res, filePath) => {
+      if (filePath.endsWith('.html')) {
+        res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+      }
+    }
+  })
+);
 
 app.get('*', (request, response, next) => {
   if (request.path.startsWith('/api/')) {
     return next();
   }
   const indexPath = path.join(frontendDistPath, 'index.html');
+  response.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   response.sendFile(indexPath, (error) => {
     if (error) {
       next();

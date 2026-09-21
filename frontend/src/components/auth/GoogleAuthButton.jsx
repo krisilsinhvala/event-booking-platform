@@ -90,22 +90,7 @@ function GoogleAuthButton({ mode = 'login' }) {
     );
   }
 
-  if (!isConfigured) {
-    return (
-      <button
-        type="button"
-        onClick={() =>
-          toast.info(
-            'Google Sign-In is ready! Please configure your Google Client ID in frontend/.env (VITE_GOOGLE_CLIENT_ID).'
-          )
-        }
-        className="flex w-full items-center justify-center gap-3 rounded-full border border-ink/15 bg-white py-3 px-4 text-sm font-semibold text-ink shadow-xs transition hover:border-ink/30 hover:bg-sand/20 active:scale-[0.99]"
-      >
-        <GoogleIcon />
-        <span>Continue with Google</span>
-      </button>
-    );
-  }
+
 
   return (
     <div className="flex w-full justify-center overflow-hidden rounded-full [&>div]:w-full [&_iframe]:!w-full [&_iframe]:!mx-auto">
